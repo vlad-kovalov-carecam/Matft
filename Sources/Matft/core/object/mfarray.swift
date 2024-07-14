@@ -118,7 +118,9 @@ open class MfArray: MfArrayProtocol{
     @available(macOS 12.0, *)
     @available(iOS 14.0, *)
     public init (base: inout MLMultiArray, share: Bool = true){
-        precondition([MLMultiArrayDataType.float, MLMultiArrayDataType.double].contains(base.dataType), "Must be float or double in share mode")
+        if #available(iOS 14.0, *) {
+            precondition([MLMultiArrayDataType.float, MLMultiArrayDataType.double].contains(base.dataType), "Must be float or double in share mode")
+        }
         // note that base is not assigned here!
         let mftype = MfType.mftype(value: base.dataType)
         let mfdata = MfData(source: share ? base : nil, data_real_ptr: base.dataPointer, storedSize: base.count, mftype: mftype, offset: 0)
